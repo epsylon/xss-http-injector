@@ -123,35 +123,34 @@ var frame=0;
 function Egg(){
     	window.scrollBy(0,50); // horizontal and vertical scroll increments
     	scrolldelay = setTimeout('pageScroll()',100); // scrolls every 100 milliseconds
-var canvas = document.createElement('canvas');
-canvas.id = "CursorLayer";
-canvas.width  = 298;
-canvas.height = 96;
-canvas.style.zIndex   = -2;
-canvas.style.position = "absolute";
-canvas.style.padding=5;
-canvas.style.top = 0; 
-canvas.style.border = "1px solid";
-canvas.style.background = "red";
- var context = canvas.getContext('2d');
-
-      context.font = 'italic 20pt Calibri';
-      context.fillText('BigBrother!!!', 50, 50);
-document.body.appendChild(canvas);
-var canvas = document.createElement('canvas');
-canvas.style.zIndex   = -1;
-canvas.style.background = "rgba(0,0,0,0)";
-canvas.width = 408;
-canvas.height = 598;
-document.body.appendChild(canvas);
-var ctx = canvas.getContext('2d');
-ctx.moveTo(200,200);
-for(i=0;i<10;i++){
+	var canvas = document.createElement('canvas');
+	canvas.id = "CursorLayer";
+	canvas.width  = 298;
+	canvas.height = 96;
+	canvas.style.zIndex   = -2;
+	canvas.style.position = "absolute";
+	canvas.style.padding=5;
+	canvas.style.top = 0; 
+	canvas.style.border = "1px solid";
+	canvas.style.background = "red";
+	var context = canvas.getContext('2d');
+	context.font = 'italic 20pt Calibri';
+	context.fillText('BigBrother!!!', 50, 50);
+	document.body.appendChild(canvas);
+	var canvas = document.createElement('canvas');
+	canvas.style.zIndex   = -1;
+	canvas.style.background = "rgba(0,0,0,0)";
+	canvas.width = 408;
+	canvas.height = 598;
+	document.body.appendChild(canvas);
+	var ctx = canvas.getContext('2d');
+	ctx.moveTo(200,200);
+	for(i=0;i<10;i++){
 	ctx.strokeStyle = '#00ff00';
 	ctx.lineTo(200+100*Math.random(),100+500*Math.random());
 	ctx.stroke();
 	ctx.strokeStyle='#fffff0';
-      ctx.beginPath();
+        ctx.beginPath();
 	cx=200+100*Math.random();
 	cy=50+400*Math.random();
       	ctx.arc(cx,cy, i*4, 0, 2 * Math.PI, false);
@@ -160,10 +159,10 @@ for(i=0;i<10;i++){
 	ctx.strokeStyle='#ffff00';
 	ctx.fillStyle = 'rgba(0,0,0,0.5)';
 	ctx.arc(cx*1.2,cy*1.2, i*3, 0, 2 * Math.PI, false);
-      ctx.fill();
-      ctx.lineWidth = i/2;
-      ctx.strokeStyle = '#aa3300';
-      ctx.stroke();
+        ctx.fill();
+        ctx.lineWidth = i/2;
+        ctx.strokeStyle = '#aa3300';
+        ctx.stroke();
 }
 setTimeout('Egg()', 500);
 frame++;

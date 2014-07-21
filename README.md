@@ -17,18 +17,6 @@ PoC (proof of concept):
 
 There are different 'sandboxes' ready to try your XSS injections, locally. 
 
-Enter this info to see how some flags can be exploited:
-
-Method: GET
-Target URL: sandbox/search.php
-Vulnerability: search_text
-Vector: ">
-
-Method: POST
-Target URL: sandbox/search.php
-Vulnerability: search_text
-Vector: ">
-
 -------------------------------------
 
 Hooker:
