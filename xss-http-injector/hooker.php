@@ -36,7 +36,7 @@ if(isset($_REQUEST['generate']))
 </head>
 <body>
 <center>
-<br />| <a href="https://github.com/epsylon/xss-http-post-injector" target="_blank">XSS HTTP Inject0r!</a> - 2014 - <a href="http://gplv3.fsf.org" target="_blank">GPLv3</a> |<br /><br />
+<br />| <a href="https://github.com/epsylon/xss-http-injector" target="_blank">XSS HTTP Inject0r!</a> - 2014 - <a href="http://gplv3.fsf.org" target="_blank">GPLv3</a> |<br /><br />
 <img src="images/pwned.jpg" width="350" height="203" border="1"><br />
 'Hook' targets to execute XSS exploits on their browsers... |<a href="index.html">Back</a>|<br /><br />
 <form method="POST" name="hook_frm">
